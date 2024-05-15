@@ -49,8 +49,6 @@ public class RestController {
 
     @PostMapping(value = "/rest/user")
     public ResponseEntity<User> addUser(@RequestBody User user) {
-
-        System.out.println(user.toString());
         userService.updateUser(user);
         return ResponseEntity.ok().body(user);
     }
