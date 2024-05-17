@@ -10,7 +10,7 @@ public interface UserService {
 
     void updateUser(User user);
 
-    List<User> listUsers();
+    List<User> findAllUsers();
 
     User getUserById(long id);
 

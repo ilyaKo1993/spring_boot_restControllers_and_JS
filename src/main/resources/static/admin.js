@@ -8,11 +8,10 @@ function createTable() {
         dataType: "json",
         success: function (data) {
             const users = JSON.parse(JSON.stringify(data));
-
             for (let i = 0; i < users.length; i++) {
 
-                let tr = $("<tr>").attr("id", users[i].id);
-
+                let tr = $("<tr>")
+                    .attr("id", users[i].id);
                 tr.append("" +
                     "<td>" + users[i].id + "</td>" +
                     "<td>" + users[i].name + "</td>" +
@@ -20,7 +19,7 @@ function createTable() {
                     "<td>" + users[i].age + "</td>" +
                     "<td>" + users[i].login + "</td>" +
                     "<td>" + getUserRoles(users[i].roles) + "</td>" +
-                    "<td><button onclick='editUser(" + data[i].id + ")' type=\"button\" class=\"btn btn-info\" data-toggle=\"modal\" data-target=\"#editModal\">Edit</button></td>" +
+                    "<td><button onclick='editUser(" + users[i].id + ")' type=\"button\" class=\"btn btn-info\" data-toggle=\"modal\" data-target=\"#editModal\">Edit</button></td>" +
                     "<td><button onclick='deleteUser(" + users[i].id + ")' class=\"btn btn-danger\">Delete</button></td>"
                 );
                 $("#tableBody").append(tr)
@@ -30,6 +29,35 @@ function createTable() {
 
     });
 }
+
+// function printCountUsers(funcName) {
+//     var tableBodyElem = document.getElementById("tableBody")
+//     var trElements = tableBodyElem.getElementsByTagName("tr")
+//
+//
+//     console.log('Привет от JavaScript!' + funcName + " " + trElements.length);
+//     //deleteTable()
+//
+// }
+
+function deleteTable() {
+    var tableBodyElem = document.getElementById("tableBody")
+    if (tableBodyElem != null) {
+        var trElements = tableBodyElem.getElementsByTagName("tr")
+        for (let i = trElements.length - 1; i >= 0; i--) {
+            trElements[i].remove()
+        }
+    }
+}
+
+
+function refreshTable() {
+    deleteTable()
+    createTable()
+    //location.reload();
+
+}
+
 
 function getUserRoles(roles) {
     const userRoles = [];
@@ -69,6 +97,15 @@ function createRoles() {
     });
 }
 
+function cleanUserForm() {
+    $("#newUserName").val("")
+    $("#newUserLastName").val("")
+    $("#newUserAge").val("")
+    $("#newUserLogin").val("")
+    $("#newUserPassword").val("")
+    $("#newUserRole").val("")
+}
+
 function newUser() {
 
     let roles = [];
@@ -84,6 +121,7 @@ function newUser() {
         password: $("#newUserPassword").val(),
         roles: JSON.parse(JSON.stringify(roles))
     };
+    cleanUserForm()
 
     $.ajax({
         url: '/rest/user',
@@ -92,16 +130,15 @@ function newUser() {
         contentType: 'application/json',
         data: JSON.stringify(json),
         success: function (data) {
-            createTable();
             $('#usersTab').addClass("show active")
             $('#navTable').addClass('active')
             $('#newUser').removeClass("show active")
             $('#navNewUser').removeClass("active")
+            refreshTable()
 
         },
 
     });
-
 }
 
 
@@ -154,7 +191,7 @@ function updateUser() {
         data: JSON.stringify(json),
         contentType: "application/json",
         success: function () {
-            createTable();
+            refreshTable()
             $("#tableBody #" + id).update();
         },
 

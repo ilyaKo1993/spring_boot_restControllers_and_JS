@@ -11,8 +11,8 @@ import ru.kata.spring.boot_security.demo.services.UserService;
 
 import java.util.List;
 
-@org.springframework.web.bind.annotation.RestController
-public class RestController {
+@RestController
+public class UserRestController {
 
     private UserService userService;
     private RoleService roleService;
@@ -25,9 +25,9 @@ public class RestController {
     }
 
 
-    @GetMapping(value = "/rest/users")
+    @GetMapping("/rest/users")
     public List<User> getUsers() {
-        return userService.listUsers();
+        return userService.findAllUsers();
     }
 
     @GetMapping("/rest/roles")
@@ -36,18 +36,18 @@ public class RestController {
     }
 
 
-    @GetMapping(value = "/rest/user/{id}")
+    @GetMapping("/rest/user/{id}")
     public User getUserById(@PathVariable("id") int id) {
         return userService.getUserById(id);
     }
 
-    @DeleteMapping(value = "/rest/user/{id}")
+    @DeleteMapping("/rest/user/{id}")
     public ResponseEntity<User> delete(@PathVariable("id") int id) {
         userService.removeUser(userService.getUserById(id).getId());
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value = "/rest/user")
+    @PostMapping("/rest/user")
     public ResponseEntity<User> addUser(@RequestBody User user) {
         userService.updateUser(user);
         return ResponseEntity.ok().body(user);

@@ -1,6 +1,5 @@
 package ru.kata.spring.boot_security.demo.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -40,7 +39,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public List<User> listUsers() {
+    public List<User> findAllUsers() {
         return this.userDao.listUsers();
     }
 
